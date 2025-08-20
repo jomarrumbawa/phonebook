@@ -34,20 +34,30 @@ const App = () => {
     const newPerson = {
       name: newName.trim(),
       number: newNumber,
-      id: persons.length + 1,
     };
 
-    checkExistingEntry(newPerson);
+    if (checkExistingEntry(newPerson)) {
+      alert(`${newPerson.name} is already added to phonebook`);
+    } else {
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then((res) => {
+          setPersons(persons.concat(res.data));
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch((error) => {
+          alert('Error adding contact. Please try again');
+        });
+    }
   };
 
   const checkExistingEntry = (person) => {
     const existingEntries = persons.map((p) => p.name.toLowerCase());
     if (existingEntries.includes(person.name.toLowerCase())) {
-      alert(`${person.name} is already added to phonebook`);
+      return true;
     } else {
-      setPersons(persons.concat(person));
-      setNewName('');
-      setNewNumber('');
+      return false;
     }
   };
 
