@@ -52,11 +52,18 @@ const App = () => {
 
   const checkExistingEntry = (person) => {
     const existingEntries = persons.map((p) => p.name.toLowerCase());
-    if (existingEntries.includes(person.name.toLowerCase())) {
-      return true;
-    } else {
-      return false;
-    }
+    return existingEntries.includes(person.name.toLowerCase());
+  };
+
+  const removeContact = (id) => {
+    personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter((p) => p.id !== id));
+      })
+      .catch((error) => {
+        alert('Error deleting contact. Please try again.');
+      });
   };
 
   return (
@@ -72,7 +79,10 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <PersonsList personsToShow={personsToShow} />
+      <PersonsList
+        personsToShow={personsToShow}
+        removeContact={removeContact}
+      />
     </div>
   );
 };
