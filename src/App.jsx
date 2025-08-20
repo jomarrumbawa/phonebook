@@ -55,15 +55,17 @@ const App = () => {
     return existingEntries.includes(person.name.toLowerCase());
   };
 
-  const removeContact = (id) => {
-    personService
-      .remove(id)
-      .then(() => {
-        setPersons(persons.filter((p) => p.id !== id));
-      })
-      .catch((error) => {
-        alert('Error deleting contact. Please try again.');
-      });
+  const removeContact = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== id));
+        })
+        .catch((error) => {
+          alert('Error deleting contact. Please try again.');
+        });
+    }
   };
 
   return (

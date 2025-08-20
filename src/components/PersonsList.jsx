@@ -4,7 +4,7 @@ const PersonsList = ({ personsToShow, removeContact }) => {
       {personsToShow.map((p) => (
         <div key={p.id}>
           {p.name} {p.number}{' '}
-          <button onClick={() => removeContact(p.id)}>delete</button>
+          <button onClick={() => removeContact(p.id, p.name)}>delete</button>
         </div>
       ))}
     </>
