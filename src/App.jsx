@@ -35,7 +35,9 @@ const App = () => {
     };
 
     if (checkExistingEntry(newPerson)) {
-      alert(`${newPerson.name} is already added to phonebook`);
+      window.confirm(
+        `${newPerson.name} is already added to phonebook, replace the older number with a new one?`
+      ) && updateContact(newPerson.name);
     } else {
       personService
         .create(newPerson)
@@ -53,6 +55,21 @@ const App = () => {
   const checkExistingEntry = (person) => {
     const existingEntries = persons.map((p) => p.name.toLowerCase());
     return existingEntries.includes(person.name.toLowerCase());
+  };
+
+  const updateContact = (name) => {
+    const person = persons.find(
+      (p) => p.name.toLowerCase() === name.toLowerCase()
+    );
+    const updatedPerson = { ...person, number: newNumber };
+    personService
+      .update(person.id, updatedPerson)
+      .then((res) => {
+        setPersons(persons.map((p) => (p.id === person.id ? res.data : p)));
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch((error) => alert('Error updating contact. Please try again.'));
   };
 
   const removeContact = (id, name) => {
